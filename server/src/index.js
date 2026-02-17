@@ -3,6 +3,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import { PrismaClient } from "@prisma/client";
 import { customAlphabet } from "nanoid";
+import morgan from "morgan";
 
 dotenv.config();
 
@@ -18,6 +19,7 @@ const APP_BASE_URL = process.env.APP_BASE_URL;
 
 app.use(cors());
 app.use(express.json());
+app.use(morgan("combined"));
 
 function getBaseUrl(req) {
   if (APP_BASE_URL) return APP_BASE_URL.replace(/\/$/, "");
@@ -86,6 +88,7 @@ app.post("/api/shorten", async (req, res) => {
       createdAt: created.createdAt,
     });
   } catch (err) {
+    console.error("POST /api/shorten error:", err);
     return res.status(500).json({ error: "Server error" });
   }
 });
@@ -111,6 +114,7 @@ app.get("/:code", async (req, res) => {
 
     return res.redirect(302, link.longUrl);
   } catch (err) {
+    console.error("GET /:code error:", err);
     return res.status(500).send("Server error");
   }
 });
