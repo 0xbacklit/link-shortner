@@ -50,7 +50,11 @@ A clean, minimal link shortener built with React, Express, PostgreSQL (Supabase)
 3. Record is saved to Postgres via Prisma.
 4. Visiting `/:code` looks up the long URL and redirects (or returns 404/410).
 
-## Architecture
+### Collision Handling
+
+`shortCode` is generated with `nanoid`. If a collision happens (unique constraint error), the server retries up to 5 times before failing.
+
+## App Flow
 
 ```mermaid
 flowchart LR
